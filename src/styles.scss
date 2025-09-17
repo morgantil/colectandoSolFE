@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// 1) Core styles for Angular Material
+@include mat.core();
+
+// 2) Define custom pastel palettes
+$app-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 200, 100, 300);
+$app-accent:  mat.m2-define-palette(mat.$m2-pink-palette,   200, 100, 300);
+$app-warn:    mat.m2-define-palette(mat.$m2-red-palette,    200, 100, 300);
+
+// 3) Light theme with gentle contrast for a pastel look
+$app-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+// 4) Apply theme to all components
+@include mat.all-component-themes($app-theme);
+
+// 5) Global layout helpers
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #fafafa;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  padding: 16px;
+}
+
+.section-title {
+  margin: 24px 0 8px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .card { padding: 12px; }
+}
