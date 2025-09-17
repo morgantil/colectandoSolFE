@@ -34,8 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
           <mat-form-field appearance="outline" class="full">
             <mat-label>Fecha</mat-label>
             <input matInput [matDatepicker]="picker" placeholder="Seleccionar fecha" formControlName="fecha" required>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-icon matSuffix>event</mat-icon>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
             <mat-error *ngIf="form.get('fecha')?.hasError('required')">La fecha es requerida</mat-error>
           </mat-form-field>
         </div>
