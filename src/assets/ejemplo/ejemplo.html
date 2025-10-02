@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capacitación Energética</title>
+  </head>
+<body>
+  <div class="container">
+<img id="logoCapacitacion" src="https://www.edenor.com/themes/custom/edenor/logo-color.svg" alt="Logo Capacitación Energética">
+<img id="logoCapacitacion" src="https://colectandosol.co/wp-content/uploads/2016/03/logo-colectandosol-negro-e1458937808521.png" alt="Logo Capacitación Energética">
+    <h1>Capacitación Energética</h1>
+    <form id="formulario">
+      <div class="section">
+        <div class="field">
+          <input type="text" id="idCuenta" placeholder="ID de Cuenta" required>
+          </div>
+        <div class="field">
+          <input type="text" id="numeroMedidor" placeholder="Número de Medidor" required>
+          </div>
+        <div class="field">
+          <input type="text" id="nombreTitular" placeholder="Nombre del Titular" required>
+          </div>
+        <div class="field">
+          <input type="text" id="dni" placeholder="DNI" required>
+          </div>
+        <div class="field">
+          <input type="text" id="direccion" placeholder="Dirección">
+          </div>
+        <div class="field">
+          <input type="text" id="fechaNacimiento" placeholder="Fecha de Nacimiento">
+          </div>
+        <div class="field">
+          <input type="text" id="entreCalles" placeholder="Entre Calles">
+          </div>
+        <div class="field">
+          <input type="text" id="departamento" placeholder="Departamento">
+          </div>
+        <div class="field">
+          <input type="text" id="referencia" placeholder="Referencia">
+          </div>
+        <div class="field">
+          <select id="zona" name="zona" required>
+            <option value="">Zona</option>
+          </select>
+          </div>
+        <div class="field">
+          <select id="partido" name="partido" required>
+            <option value="">Partido</option>
+          </select>
+          </div>
+        <div class="field">
+          <select id="localidad" name="localidad" required>
+            <option value="">Localidad</option>
+          </select>
+          </div>
+        <div class="field">
+          <input type="text" id="telefono" placeholder="Teléfono">
+          </div>
+        <div class="field">
+          <input type="email" id="mail" placeholder="Mail">
+          </div>
+        <div class="field">
+          <input type="text" id="medidor" placeholder="Medidor">
+          </div>
+        <div class="field">
+          <textarea id="artefactos" placeholder="Artefactos" rows="3"></textarea>
+          </div>
+        <div class="field">
+          <textarea id="observaciones" placeholder="Observaciones" rows="3"></textarea>
+          </div>
+        <div class="field">
+          <input type="text" id="nombreCliente" placeholder="Nombre del Cliente" required>
+          </div>
+        <div class="field">
+          <input type="text" id="nombrePromotor" placeholder="Nombre del Promotor" required>
+          </div>
+        <div class="field">
+          <input type="text" id="fecha" placeholder="Fecha" required value="">
+          </div>
+      </div>
+      <div class="section">
+        <select id="resultado" name="resultado" required>
+          <option value="">Resultado</option>
+          <option value="Cliente Capacitado">Cliente Capacitado</option>
+          <option value="Cliente Capacitado - Vivienda en Construcción">Cliente Capacitado - Vivienda en Construcción</option>
+          <option value="Cliente no Capacitado - Cliente Ausente">Cliente no Capacitado - Cliente Ausente</option>
+          <option value="Cliente no Capacitado - No se Ubica">Cliente no Capacitado - No se Ubica</option>
+          <option value="Cliente no Capacitado - Vivienda Deshabitada">Cliente no Capacitado - Vivienda Deshabitada</option>
+          <option value="Cliente no Capacitado – Vivienda en Construcción">Cliente no Capacitado – Vivienda en Construcción</option>
+          <option value="Cliente no Capacitado – No Quiso Firmar">Cliente no Capacitado – No Quiso Firmar</option>
+          </select>
+      </div>
+      <div class="section signatures">
+        <div class="signature-box">
+          <div class="canvas-container">
+            <canvas id="signatureCliente"></canvas>
+            <div id="placeholderFirmaCliente" class="canvas-placeholder">Firma Cliente</div>
+            </div>
+          <button type="button" onclick="clearSignature('signatureCliente')">Limpiar Firma</button>
+          </div>
+        <div class="signature-box">
+          <div class="canvas-container">
+            <canvas id="signaturePromotor"></canvas>
+            <div id="placeholderFirmaPromotor" class="canvas-placeholder">Firma Promotor</div>
+            </div>
+          <button type="button" onclick="clearSignature('signaturePromotor')">Limpiar Firma</button>
+          </div>
+      </div>
+      <div class="submit-container">
+        <button type="submit">Enviar</button>
+        </div>
+    </form>
+    <div id="mensaje"></div>
+    </div>
+  <div id="overlay">
+    <div id="spinner" class="spinner"></div>
+<div id="overlay" style="display: none;">
+  <div class="spinner"></div>
+  <div id="overlay-message">¡Formulario Enviado!</div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+  <script>
+    // Código JavaScript para la funcionalidad del formulario
+    const clienteCanvas = document.getElementById('signatureCliente');
+    const promotorCanvas = document.getElementById('signaturePromotor');
+    const signatureCliente = new SignaturePad(clienteCanvas);
+    const signaturePromotor = new SignaturePad(promotorCanvas);
+
+    function resizeCanvas(canvas, signaturePad) {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext('2d').scale(ratio, ratio);
+      signaturePad.clear();
+    }
+
+    function adjustCanvas() {
+      resizeCanvas(clienteCanvas, signatureCliente);
+      resizeCanvas(promotorCanvas, signaturePromotor);
+    }
+
+    window.addEventListener('resize', adjustCanvas);
+    adjustCanvas();
+
+    // Establecer la fecha actual en el campo "Fecha"
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
+      document.getElementById('fecha').value = formattedDate;
+      cargarZonas(); // Cargar las zonas al cargar el documento
+    });
+
+    function clearSignature(canvasId) {
+      const pad = canvasId === 'signatureCliente' ? signatureCliente : signaturePromotor;
+      pad.clear();
+      if(canvasId === 'signatureCliente'){
+        document.getElementById('placeholderFirmaCliente').style.display = 'block';
+      } else {
+        document.getElementById('placeholderFirmaPromotor').style.display = 'block';
+      }
+    }
+
+    function mostrarOverlayMensaje(texto) {
+      const overlayMessage = document.getElementById('overlay-message');
+      overlayMessage.textContent = texto;
+      overlayMessage.style.display = 'block';
+    }
+
+    clienteCanvas.addEventListener('mousedown', function() {
+      document.getElementById('placeholderFirmaCliente').style.display = 'none';
+    });
+    clienteCanvas.addEventListener('touchstart', function() {
+      document.getElementById('placeholderFirmaCliente').style.display = 'none';
+    });
+    promotorCanvas.addEventListener('mousedown', function() {
+      document.getElementById('placeholderFirmaPromotor').style.display = 'none';
+    });
+    promotorCanvas.addEventListener('touchstart', function() {
+      document.getElementById('placeholderFirmaPromotor').style.display = 'none';
+    });
+
+    document.getElementById('formulario').onsubmit = function(event) {
+      event.preventDefault();
+
+      document.getElementById('overlay').style.display = 'flex';
+      document.querySelector('.container').style.display = 'none';
+
+      if (signatureCliente.isEmpty() || signaturePromotor.isEmpty()) {
+        document.getElementById('overlay').style.display = 'none';
+        document.querySelector('.container').style.display = 'block';
+        mostrarOverlayMensaje('Por favor, completa ambas firmas.');
+        return;
+      }
+
+      const data = {
+        idCuenta: document.getElementById('idCuenta').value,
+        numeroMedidor: document.getElementById('numeroMedidor').value,
+        nombreTitular: document.getElementById('nombreTitular').value,
+        dni: document.getElementById('dni').value,
+        direccion: document.getElementById('direccion').value,
+        fechaNacimiento: document.getElementById('fechaNacimiento').value,
+        entreCalles: document.getElementById('entreCalles').value,
+        departamento: document.getElementById('departamento').value,
+        referencia: document.getElementById('referencia').value,
+        zona: document.getElementById('zona').value,
+        partido: document.getElementById('partido').value,
+        localidad: document.getElementById('localidad').value,
+        telefono: document.getElementById('telefono').value,
+        mail: document.getElementById('mail').value,
+        medidor: document.getElementById('medidor').value,
+        artefactos: document.getElementById('artefactos').value,
+        observaciones: document.getElementById('observaciones').value,
+        nombreCliente: document.getElementById('nombreCliente').value,
+        firmaCliente: signatureCliente.toDataURL(),
+        nombrePromotor: document.getElementById('nombrePromotor').value,
+        firmaPromotor: signaturePromotor.toDataURL(),
+        fecha: document.getElementById('fecha').value,
+        resultado: document.getElementById('resultado').value
+      };
+
+      console.log("Datos a enviar:", data);
+
+      google.script.run.withSuccessHandler(() => {
+        document.getElementById('spinner').style.display = 'none';
+        mostrarOverlayMensaje('¡Formulario Enviado!');
+      }).withFailureHandler((error) => {
+        document.getElementById('spinner').style.display = 'none';
+        mostrarOverlayMensaje('Hubo un problema al enviar el formulario.');
+        console.error("Error:", error);
+      }).submitData(data);
+    };
+
+    document.querySelectorAll('.field input, .field textarea').forEach(function(elem) {
+      elem.addEventListener('focus', function() {
+        this.setAttribute('data-placeholder', this.getAttribute('placeholder'));
+        this.setAttribute('placeholder', '');
+      });
+      elem.addEventListener('blur', function() {
+        if (this.value === '') {
+          this.setAttribute('placeholder', this.getAttribute('data-placeholder'));
+        }
+      });
+    });
+
+    // Definición explícita de los datos
+    const zonas = [
+      "Olivos", "San Martín", "La Matanza", "Merlo", "Morón", "Moreno", "Pilar", "San Miguel", "Tigre"
+    ];
+
+    const partidosPorZona = {
+      "Olivos": ["San Isidro","Vicente Lopez"],
+      "San Martín": ["3 de febrero", "Gral San Martin"],
+      "La Matanza": ["La Matanza"],
+      "Merlo": ["Gral Las Heras", "Marcos Paz", "Merlo"],
+      "Morón": ["Hurlingham", "Ituzaingo", "Morón"],
+      "Moreno": ["Gral Rodriguez", "Moreno"],
+      "Pilar": ["Escobar", "Pilar"],
+      "San Miguel": ["Jose C Paz", "Malvinas Argentinas", "San Miguel"],
+      "Tigre": ["San Fernando", "Tigre"]
+    };
+
+    const localidadesPorPartido = {
+      "Vicente Lopez": ["Carapachay", "Florida (Oeste)", "La Lucila", "Munro", "Vicente Lopez", "Villa Adelina (VL)", "Villa Martelli"],
+      "San Isidro": ["Beccar", "Boulogne", "San Isidro"],
+      "3 de febrero": ["11 de septiembre", "Caseros", "Churruca", "Ciudadela", "El Libertador", "Jose Ingenieros", "Loma Hermosa", "Martin Coronado", "Pablo Podesta", "Remedios de Escalada", "Santos Lugares", "Villa Bosch", "Villa Raffo"],
+      "Gral San Martin": ["Ayacucho", "Bernardo Monteagudo", "Billinghurst", "C Jardin El Libertador", "C Libertador San Martin", "Chacabuco", "Cnel Jose Zapiola", "Gderos de San Martin", "Godoy Cruz", "Gral Eugenio Necochea", "Gral Jose de Sucre", "Gral Jose Tomas Guido", "Gregoria Matorras", "Jose Leon Suarez", "Juan M de Pueyrredon", "Marques A de Aguado", "Parque San Lorenzo", "Villa Ballester", "Villa Libertad", "Villa Maipu", "Yapeyu"],
+      "La Matanza": ["20 de junio", "Aldo Bonzi", "Ciudad Evita", "Gonzalez Catan", "Gregorio de Laferrere", "Isidro Casanova", "La Tablada", "Lomas del Mirador", "Rafael Castillo", "Ramos Mejia", "San Justo", "Tapiales", "Villa Luzuriaga", "Villa Madero", "Virrey del Pino"],
+      "Gral Las Heras": ["Gral Las Heras"],
+      "Marcos Paz": ["Marcos Paz"],
+      "Merlo": ["Libertad", "Mariano Acosta", "Merlo", "Pontevedra", "San Antonio de Padua"],
+      "Hurlingham": ["Hurlingham", "Villa Tesei", "William Morris"],
+      "Ituzaingo": ["Ituzaingo", "Villa Udaondo"],
+      "Moron": ["Castelar", "El Palomar", "Moron", "Villa Sarmiento"],
+      "Gral Rodriguez": ["Gral Rodriguez"],
+      "Moreno": ["Cuartel V", "Francisco Alvarez", "La Reja", "Moreno", "Paso del Rey", "Trujui"],
+      "Escobar": ["Delta 1ra Seccion (ES)", "Escobar", "Garin", "Ingeniero Maschwitz", "Maquinista Savio", "Matheu"],
+      "Pilar": ["Del Viso", "Fatima", "La Lonja", "Luis Lagomarsino", "Manuel Alberti", "Manzanares", "Pilar", "Pte Derqui", "Villa Astolfi", "Villa Rosa", "Zelaya"],
+      "Jose C Paz": ["Jose C Paz"],
+      "Malvinas Argentinas": ["Adolfo Sourdeaux", "El Triangulo", "Grand Bourg", "Los Polvorines", "Pablo Nogues", "Tierras Altas", "Tortuguitas", "Villa de Mayo"],
+      "San Miguel": ["Bella Vista", "Muñiz", "San Miguel"],
+      "San Fernando": ["Delta 3ra Seccion (SF)", "San Fernando", "Victoria", "Virreyes"],
+      "Tigre": ["Benavidez", "Ciudad de Tigre", "Delta 1ra Seccion (TI)", "Dique Lujan", "Don Torcuato", "El Talar", "General Pacheco", "Ricardo Rojas", "Rincon de Milberg", "Troncos del Talar"]
+    };
+
+    const zonaSelect = document.getElementById('zona');
+    const partidoSelect = document.getElementById('partido');
+    const localidadSelect = document.getElementById('localidad');
+
+    function cargarZonas() {
+      zonas.forEach(zona => {
+        const option = document.createElement('option');
+        option.value = zona;
+        option.textContent = zona;
+        zonaSelect.appendChild(option);
+      });
+    }
+
+    function cargarPartidos(zonaSeleccionada) {
+      partidoSelect.innerHTML = '<option value="">Partido</option>';
+      localidadSelect.innerHTML = '<option value="">Localidad</option>';
+
+      if (zonaSeleccionada && partidosPorZona[zonaSeleccionada]) {
+        partidosPorZona[zonaSeleccionada].forEach(partido => {
+          const option = document.createElement('option');
+          option.value = partido;
+          option.textContent = partido;
+          partidoSelect.appendChild(option);
+        });
+      }
+    }
+
+    function cargarLocalidades(partidoSeleccionado) {
+      localidadSelect.innerHTML = '<option value="">Localidad</option>';
+
+      if (partidoSeleccionado && localidadesPorPartido[partidoSeleccionado]) {
+        localidadesPorPartido[partidoSeleccionado].forEach(localidad => {
+          const option = document.createElement('option');
+          option.value = localidad;
+          option.textContent = localidad;
+          localidadSelect.appendChild(option);
+        });
+      }
+    }
+
+    zonaSelect.addEventListener('change', function() {
+      const zonaSeleccionada = this.value;
+      cargarPartidos(zonaSeleccionada);
+    });
+
+    partidoSelect.addEventListener('change', function() {
+      const partidoSeleccionado = this.value;
+      cargarLocalidades(partidoSeleccionado);
+    });
+  </script>
+</body>
+</html>
