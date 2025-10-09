@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { GoogleSheetsService, FormularioData } from '../../../../services/google-sheets.service';
 
 @Component({
   selector: 'app-formulario-respaldo',
@@ -555,7 +556,11 @@ export class FormularioRespaldo implements AfterViewInit {
     return partidoSeleccionado ? this.localidadesPorPartido[partidoSeleccionado] || [] : [];
   }
 
-  constructor(private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(
+    private fb: FormBuilder, 
+    private snackBar: MatSnackBar,
+    private googleSheetsService: GoogleSheetsService
+  ) {
     this.form = this.fb.group({
       // Información del cliente
       idCuenta: new FormControl<string | null>(null, { validators: [Validators.required] }),
@@ -714,7 +719,7 @@ export class FormularioRespaldo implements AfterViewInit {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.puedeEnviar) {
       this.form.markAllAsTouched();
       this.snackBar.open('Por favor, complete todos los campos requeridos y las firmas', 'Cerrar', {
@@ -726,22 +731,40 @@ export class FormularioRespaldo implements AfterViewInit {
 
     this.enviando = true;
 
-    // Simular envío (aquí iría la lógica real de envío)
-    setTimeout(() => {
-      const payload = {
+    try {
+      // Preparar los datos del formulario
+      const formularioData: FormularioData = {
         ...this.form.value,
         firmaCliente: this.clienteCanvas?.nativeElement.toDataURL(),
         firmaPromotor: this.promotorCanvas?.nativeElement.toDataURL()
       };
 
-      console.log('Formulario enviado:', payload);
-      
-      this.enviando = false;
-      this.snackBar.open('Formulario enviado exitosamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
+      console.log('Enviando formulario a Google Sheets:', formularioData);
+
+      // Intentar enviar usando Google Apps Script (método más simple)
+      const exito = await this.googleSheetsService.enviarFormulario(formularioData);
+
+      if (exito) {
+        this.snackBar.open('Formulario enviado exitosamente a Google Sheets', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        
+        // Limpiar el formulario después del envío exitoso
+        this.onLimpiar();
+      } else {
+        throw new Error('Error al enviar a Google Sheets');
+      }
+
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      this.snackBar.open('Error al enviar el formulario. Por favor, intente nuevamente.', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
       });
-    }, 2000);
+    } finally {
+      this.enviando = false;
+    }
   }
 
   onLimpiar() {
