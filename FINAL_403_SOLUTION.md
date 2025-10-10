@@ -219,3 +219,4 @@ Una vez que tengas una URL que funcione:
 ## Recomendación
 
 **Crea un script completamente nuevo** (Paso 6) - Es la solución más confiable y rápida.
+
