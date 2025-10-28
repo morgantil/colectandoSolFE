@@ -37,7 +37,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
   <div class="container">
     <!-- Logos -->
     <div class="logo-container">
-      <img class="logo" src="https://www.edenor.com/themes/custom/edenor/logo-color.svg" alt="Logo Edenor">
+      <img class="logo" src="assets/edenor-logo.jpg" alt="Logo Edenor">
       <img class="logo" src="https://colectandosol.co/wp-content/uploads/2016/03/logo-colectandosol-negro-e1458937808521.png" alt="Logo ColectandoSol">
     </div>
 
