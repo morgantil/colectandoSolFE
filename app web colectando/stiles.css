@@ -1,0 +1,415 @@
+/* Estilos generales (para pantallas más pequeñas - móviles) */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 26px;
+  background: #0072CE; /* Azul medio para el fondo del body */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#logoCapacitacion {
+  display: block;
+  margin: 0 auto 20px; /* O 15px en la media query */
+  width: 33.33%;
+  height: auto;
+}
+
+#logoCapacitacion {
+  display: block;
+  margin: 0 auto 20px;
+  width: 33.33%;
+  height: auto;
+}
+
+.container {
+  max-width: 100%;
+  padding: 20px; /* Reducido el padding para asegurar visibilidad inicial */
+  background-color: #FFFFFF; /* Fondo del contenedor cambiado a blanco */
+  border-radius: 31.2px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  border: 1.3px solid #0056A4; /* Azul oscuro para el borde del contenedor */
+  /* opacity: 0; */ /* Comentado para asegurar visibilidad inicial */
+  /* animation: fadeIn 0.5s ease-in-out forwards; */ /* Comentado para asegurar visibilidad inicial */
+  margin: 10px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50; /* Mantenemos el color de la fuente */
+  margin-bottom: 45px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 6.63rem;
+}
+
+.section {
+  margin-bottom: 18px;
+  padding: 25px;
+  background-color: #E0F7FA; /* Un blanco muy claro para las secciones */
+  border-radius: 15px;
+  border: 1px solid #0072CE; /* Azul medio para el borde de las secciones */
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.field {
+  margin-bottom: 3px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 5px;
+  color: #495057; /* Mantenemos el color de la fuente */
+  font-weight: bold;
+  font-size: 3.51rem;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field select,
+.field input[type="date"],
+.field textarea {
+  width: 100%;
+  padding: 40px;
+  border: 1px solid #0056A4; /* Azul oscuro para el borde de los campos */
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 3.9rem;
+  color: #000; /* Mantenemos el color de la fuente */
+  font-weight: bold;
+  text-align: center;
+  transition: border-color 0.3s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder,
+.field select::placeholder {
+  color: #000; /* Mantenemos el color de la fuente */
+  font-weight: bold;
+  opacity: 1;
+  text-align: center;
+  font-size: 3.9rem;
+}
+
+.field select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="#495057" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 35px center;
+  padding-right: 90px;
+}
+
+.field input[type="text"]:focus,
+.field input[type="email"]:focus,
+.field select:focus,
+.field input[type="date"]:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #0056A4; /* Verde para el foco de los campos (cambiado a azul oscuro) */
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 164, 0.25);
+}
+
+.field textarea {
+  text-align: left;
+}
+
+.signatures {
+  display: block;
+}
+
+.signature-box {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.signature-box:last-child {
+  margin-bottom: 0;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 780px;
+  border: 1px solid #0072CE; /* Azul medio para el borde del canvas */
+  margin-bottom: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6c757d; /* Mantenemos el color de la fuente */
+  font-style: italic;
+  font-size: 3.9rem;
+  font-weight: bold;
+}
+
+.signature-box canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.signature-box button {
+  padding: 35px 70px;
+  border: none;
+  border-radius: 16px;
+  background-color: #00B140; /* Verde para el botón de limpiar firma */
+  color: white;
+  cursor: pointer;
+  font-size: 3.9rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signature-box button:hover {
+  background-color: #008F31;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 35px;
+}
+
+.submit-container button[type="submit"] {
+  padding: 50px 130px;
+  background-color: #00B140; /* Verde para el botón de envío */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 4.29rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.submit-container button[type="submit"]:hover {
+  background-color: #008F31;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* Blanco con transparencia para el overlay */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spinner {
+  border: 10px solid rgba(0, 0, 0, 0.3);
+  border-top: 10px solid #0056A4; /* Azul oscuro para el spinner */
+  border-radius: 50%;
+  width: 170px;
+  height: 170px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#overlay-message {
+  color: white;
+  margin-top: 50px;
+  font-size: 3.9rem;
+}
+
+#resultado {
+  width: 100%;
+  padding: 40px;
+  border: 1px solid #0056A4; /* Azul oscuro para el borde del select */
+  border-radius: 12px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 3.9rem;
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="#495057" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 35px center;
+  padding-right: 90px;
+}
+
+#resultado:focus {
+  outline: none;
+  border-color: #0056A4;
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 164, 0.25);
+}
+
+.field input[type="date"] {
+  text-align: center;
+  padding: 40px;
+  font-size: 3.9rem;
+}
+
+/* Media Query para pantallas de 769 píxeles de ancho o más (notebooks) */
+@media (min-width: 769px) {
+  body {
+    margin: 10px;
+    background: #0072CE;
+  }
+
+  #logoCapacitacion {
+  display: block;
+  margin: 0 auto 20px; /* O 15px en la media query */
+  width: 33.33%;
+  height: auto;
+}
+
+  #logoCapacitacion {
+    display: block;
+    margin: 0 auto 15px; /* Puedes ajustar el margen inferior para pantallas más grandes si lo deseas */
+    width: 33.33%;
+    height: auto;
+  }
+
+  .container {
+    max-width: 650px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #0056A4; /* Azul oscuro para el borde del contenedor en notebooks */
+    margin: 20px auto;
+    background-color: #FFFFFF; /* Fondo del contenedor en notebooks cambiado a blanco */
+  }
+
+  h1 {
+    margin-bottom: 35px;
+    font-size: 2.55rem;
+  }
+
+  .section {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #0072CE;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #E0F7FA;
+  }
+
+  .field {
+    margin-bottom: 10px;
+  }
+
+  .field label {
+    margin-bottom: 6px;
+    font-size: 1.35rem;
+  }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field select,
+  .field input[type="date"],
+  .field textarea {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #0056A4; /* Azul oscuro para el borde de los campos en notebooks */
+    font-size: 1.5rem;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder,
+  .field select::placeholder {
+    font-size: 1.5rem;
+  }
+
+  .field select {
+    background-position: right 12px center;
+    padding-right: 35px;
+  }
+
+  .canvas-container {
+    height: 150px;
+    border-radius: 6px;
+    border: 1px solid #0072CE;
+    margin-bottom: 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .canvas-placeholder {
+    font-size: 1.5rem;
+  }
+
+  .signature-box {
+    margin-bottom: 20px;
+  }
+
+  .signature-box button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #00B140; /* Verde para el botón de limpiar firma en notebooks */
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .signature-box button:hover {
+    background-color: #008F31;
+  }
+
+  .submit-container {
+    margin-top: 30px;
+  }
+
+  .submit-container button[type="submit"] {
+    padding: 14px 35px;
+    border-radius: 10px;
+    background-color: #00B140; /* Verde para el botón de envío en notebooks */
+    color: white;
+    font-size: 1.65rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+  }
+
+  .submit-container button[type="submit"]:hover {
+    background-color: #008F31;
+  }
+
+  #overlay-message {
+    font-size: 1.5rem;
+    margin-top: 30px;
+    color: white;
+  }
+
+  #resultado {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #0056A4;
+    font-size: 1.5rem;
+    background-position: right 12px center;
+    padding-right: 35px;
+  }
+
+  #resultado:focus {
+    border-color: #0056A4;
+    box-shadow: 0 0 0 0.2rem rgba(0, 86, 164, 0.25);
+  }
+
+  .field input[type="date"] {
+    padding: 12px;
+    font-size: 1.5rem;
+  }
+}

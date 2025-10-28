@@ -1,0 +1,142 @@
+
+<div class="container">
+  <img id="logoCapacitacion" src="https://www.edenor.com/themes/custom/edenor/logo-color.svg" alt="Logo Capacitación Energética">
+  <img id="logoCapacitacion" src="https://colectandosol.co/wp-content/uploads/2016/03/logo-colectandosol-negro-e1458937808521.png" alt="Logo Capacitación Energética">
+  <h1>Capacitación Energética</h1>
+  <form id="formulario" #formulario="ngForm" (ngSubmit)="onSubmit($event)" novalidate>
+    <div class="section">
+      <div class="field">
+        <input type="text" id="idCuenta" name="idCuenta" placeholder="ID de Cuenta" required minlength="4" ngModel #idCuenta="ngModel">
+        <div *ngIf="idCuenta.invalid && idCuenta.touched" class="error">ID de Cuenta es requerido (mín. 4 caracteres)</div>
+      </div>
+      <div class="field">
+        <input type="text" id="numeroMedidor" name="numeroMedidor" placeholder="Número de Medidor" required ngModel #numeroMedidor="ngModel">
+        <div *ngIf="numeroMedidor.invalid && numeroMedidor.touched" class="error">Número de Medidor es requerido</div>
+      </div>
+      <div class="field">
+        <input type="text" id="nombreTitular" name="nombreTitular" placeholder="Nombre del Titular" required ngModel #nombreTitular="ngModel">
+        <div *ngIf="nombreTitular.invalid && nombreTitular.touched" class="error">Nombre del Titular es requerido</div>
+      </div>
+      <div class="field">
+        <input type="text" id="dni" name="dni" placeholder="DNI" required pattern="^[0-9]{7,8}$" ngModel #dni="ngModel">
+        <div *ngIf="dni.invalid && dni.touched" class="error">DNI válido requerido (7-8 dígitos)</div>
+      </div>
+      <div class="field">
+        <input type="text" id="direccion" placeholder="Dirección">
+      </div>
+      <div class="field">
+        <input type="text" id="fechaNacimiento" placeholder="Fecha de Nacimiento">
+      </div>
+      <div class="field">
+        <input type="text" id="entreCalles" placeholder="Entre Calles">
+      </div>
+      <div class="field">
+        <input type="text" id="departamento" placeholder="Departamento">
+      </div>
+      <div class="field">
+        <input type="text" id="referencia" placeholder="Referencia">
+      </div>
+      <div class="field">
+        <select id="zona" name="zona" required (change)="onZonaChange($event)">
+          <option value="">Zona</option>
+          <option *ngFor="let zona of zonas" [value]="zona">{{ zona }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <select id="partido" name="partido" required (change)="onPartidoChange($event)">
+          <option value="">Partido</option>
+          <option *ngFor="let partido of partidos" [value]="partido">{{ partido }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <select id="localidad" name="localidad" required>
+          <option value="">Localidad</option>
+          <option *ngFor="let localidad of localidades" [value]="localidad">{{ localidad }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <input type="text" id="telefono" placeholder="Teléfono">
+      </div>
+      <div class="field">
+        <input type="email" id="mail" name="mail" placeholder="Mail" ngModel #mail="ngModel">
+        <div *ngIf="mail.invalid && mail.touched" class="error">Ingrese un email válido</div>
+      </div>
+      <div class="field">
+        <input type="text" id="medidor" placeholder="Medidor">
+      </div>
+      <div class="field">
+        <textarea id="artefactos" placeholder="Artefactos" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <textarea id="observaciones" placeholder="Observaciones" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <input type="text" id="nombreCliente" name="nombreCliente" placeholder="Nombre del Cliente" required ngModel #nombreCliente="ngModel">
+        <div *ngIf="nombreCliente.invalid && nombreCliente.touched" class="error">Nombre del Cliente es requerido</div>
+      </div>
+      <div class="field">
+        <input type="text" id="nombrePromotor" name="nombrePromotor" placeholder="Nombre del Promotor" required ngModel #nombrePromotor="ngModel">
+        <div *ngIf="nombrePromotor.invalid && nombrePromotor.touched" class="error">Nombre del Promotor es requerido</div>
+      </div>
+      <div class="field">
+        <input type="text" id="fecha" name="fecha" placeholder="Fecha" required ngModel #fecha="ngModel">
+        <div *ngIf="fecha.invalid && fecha.touched" class="error">La fecha es requerida</div>
+      </div>
+    </div>
+    <div class="section">
+      <select id="resultado" name="resultado" required>
+        <option value="">Resultado</option>
+        <option value="Cliente Capacitado">Cliente Capacitado</option>
+        <option value="Cliente Capacitado - Vivienda en Construcción">Cliente Capacitado - Vivienda en Construcción</option>
+        <option value="Cliente no Capacitado - Cliente Ausente">Cliente no Capacitado - Cliente Ausente</option>
+        <option value="Cliente no Capacitado - No se Ubica">Cliente no Capacitado - No se Ubica</option>
+        <option value="Cliente no Capacitado - Vivienda Deshabitada">Cliente no Capacitado - Vivienda Deshabitada</option>
+        <option value="Cliente no Capacitado – Vivienda en Construcción">Cliente no Capacitado – Vivienda en Construcción</option>
+        <option value="Cliente no Capacitado – No Quiso Firmar">Cliente no Capacitado – No Quiso Firmar</option>
+      </select>
+    </div>
+    <div class="section signatures">
+      <div class="signature-box">
+        <div class="canvas-container">
+          <canvas #signatureClienteCanvas id="signatureCliente" width="600" height="150"
+            (mousedown)="hidePlaceholder('cliente')"
+            (touchstart)="hidePlaceholder('cliente')">
+          </canvas>
+          <div id="placeholderFirmaCliente" class="canvas-placeholder">Firma Cliente</div>
+        </div>
+        <button type="button" (click)="clearSignature('cliente')">Limpiar Firma</button>
+      </div>
+      <div class="signature-box">
+        <div class="canvas-container">
+          <canvas #signaturePromotorCanvas id="signaturePromotor" width="600" height="150"
+            (mousedown)="hidePlaceholder('promotor')"
+            (touchstart)="hidePlaceholder('promotor')">
+          </canvas>
+          <div id="placeholderFirmaPromotor" class="canvas-placeholder">Firma Promotor</div>
+        </div>
+        <button type="button" (click)="clearSignature('promotor')">Limpiar Firma</button>
+      </div>
+    </div>
+    <div class="submit-container">
+      <button type="submit" [disabled]="formulario.invalid">Enviar</button>
+    </div>
+  </form>
+  <div id="mensaje"></div>
+  <style>
+    .error {
+      color: #d32f2f;
+      font-size: 1.2rem;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+  </style>
+</div>
+<div id="overlay">
+  <div id="spinner" class="spinner"></div>
+  <div id="overlay-message">¡Formulario Enviado!</div>
+</div>
+    color: var(--pill-accent);
+
+    padding-inline: 0.75rem;
+
