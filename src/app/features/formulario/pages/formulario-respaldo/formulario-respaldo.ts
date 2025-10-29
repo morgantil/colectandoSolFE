@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { FormularioService } from '../../../../formulario.service';
 
 @Component({
   selector: 'app-formulario-respaldo',
@@ -555,7 +556,11 @@ export class FormularioRespaldo implements AfterViewInit {
     return partidoSeleccionado ? this.localidadesPorPartido[partidoSeleccionado] || [] : [];
   }
 
-  constructor(private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(
+    private fb: FormBuilder, 
+    private snackBar: MatSnackBar,
+    private formularioService: FormularioService
+  ) {
     this.form = this.fb.group({
       // Información del cliente
       idCuenta: new FormControl<string | null>(null, { validators: [Validators.required] }),
@@ -715,9 +720,20 @@ export class FormularioRespaldo implements AfterViewInit {
   }
 
   onSubmit() {
-    if (!this.puedeEnviar) {
+    // Validar que las firmas estén presentes
+    if (!this.firmaCliente || !this.firmaPromotor) {
       this.form.markAllAsTouched();
-      this.snackBar.open('Por favor, complete todos los campos requeridos y las firmas', 'Cerrar', {
+      this.snackBar.open('Por favor, complete ambas firmas', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    // Validar que el formulario sea válido
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      this.snackBar.open('Por favor, complete todos los campos requeridos', 'Cerrar', {
         duration: 5000,
         panelClass: ['error-snackbar']
       });
@@ -726,22 +742,36 @@ export class FormularioRespaldo implements AfterViewInit {
 
     this.enviando = true;
 
-    // Simular envío (aquí iría la lógica real de envío)
-    setTimeout(() => {
-      const payload = {
-        ...this.form.value,
-        firmaCliente: this.clienteCanvas?.nativeElement.toDataURL(),
-        firmaPromotor: this.promotorCanvas?.nativeElement.toDataURL()
-      };
+    // Preparar el payload con los datos del formulario
+    const payload = {
+      ...this.form.value,
+      firmaCliente: this.clienteCanvas?.nativeElement.toDataURL(),
+      firmaPromotor: this.promotorCanvas?.nativeElement.toDataURL()
+    };
 
-      console.log('Formulario enviado:', payload);
-      
-      this.enviando = false;
-      this.snackBar.open('Formulario enviado exitosamente', 'Cerrar', {
-        duration: 3000,
-        panelClass: ['success-snackbar']
-      });
-    }, 2000);
+    console.log('Enviando formulario:', payload);
+
+    // Enviar al backend
+    this.formularioService.enviarFormulario(payload).subscribe({
+      next: (res: any) => {
+        console.log('Formulario enviado exitosamente:', res);
+        this.enviando = false;
+        this.snackBar.open('¡Formulario Enviado!', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        // Limpiar formulario después de envío exitoso
+        this.onLimpiar();
+      },
+      error: (err: any) => {
+        console.error('Error al enviar formulario:', err);
+        this.enviando = false;
+        this.snackBar.open('Error al enviar el formulario. Por favor, intente nuevamente.', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 
   onLimpiar() {
