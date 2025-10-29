@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FormularioService {
-  private apiUrl = 'http://localhost:3000/api/formulario';
+  private apiUrl = 'https://colectandosolbe.onrender.com/api/formulario';
 
   constructor(private http: HttpClient) {}
 
