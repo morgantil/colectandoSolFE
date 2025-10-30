@@ -498,42 +498,259 @@ export class FormularioRespaldo implements AfterViewInit {
 
   // Datos para los selectores
   zonas: string[] = [
-    "Olivos", "San Martín", "La Matanza", "Merlo", "Morón", "Moreno", "Pilar", "San Miguel", "Tigre"
+    "Zona Norte",
+    "Zona Oeste",
+    "Zona Sur",
+    "Región Capital",
+    "Región Norte",
+    "Región Noroeste",
+    "Región Centro",
+    "Región Este (Costa Atlántica)",
+    "Región Sur",
+    "Región Sudoeste"
   ];
 
   partidosPorZona: { [key: string]: string[] } = {
-    "Olivos": ["San Isidro", "Vicente Lopez"],
-    "San Martín": ["3 de febrero", "Gral San Martin"],
-    "La Matanza": ["La Matanza"],
-    "Merlo": ["Gral Las Heras", "Marcos Paz", "Merlo"],
-    "Morón": ["Hurlingham", "Ituzaingo", "Morón"],
-    "Moreno": ["Gral Rodriguez", "Moreno"],
-    "Pilar": ["Escobar", "Pilar"],
-    "San Miguel": ["Jose C Paz", "Malvinas Argentinas", "San Miguel"],
-    "Tigre": ["San Fernando", "Tigre"]
+    "Zona Norte": [
+      "Vicente López",
+      "San Isidro",
+      "San Fernando",
+      "Tigre",
+      "Escobar",
+      "Pilar",
+      "Malvinas Argentinas",
+      "San Miguel",
+      "San Martín"
+    ],
+    "Zona Oeste": [
+      "Tres de Febrero",
+      "Hurlingham",
+      "Morón",
+      "Ituzaingó",
+      "Merlo",
+      "Moreno",
+      "La Matanza"
+    ],
+    "Zona Sur": [
+      "Avellaneda",
+      "Lanús",
+      "Lomas de Zamora",
+      "Quilmes",
+      "Berazategui",
+      "Florencio Varela",
+      "Almirante Brown",
+      "Ezeiza",
+      "Esteban Echeverría",
+      "Presidente Perón"
+    ],
+    "Región Capital": [
+      "La Plata",
+      "Berisso",
+      "Ensenada"
+    ],
+    "Región Norte": [
+      "Zárate",
+      "Campana",
+      "Exaltación de la Cruz",
+      "San Andrés de Giles",
+      "San Antonio de Areco",
+      "Baradero",
+      "San Pedro",
+      "Ramallo",
+      "San Nicolás"
+    ],
+    "Región Noroeste": [
+      "Pergamino",
+      "Colón",
+      "Rojas",
+      "Salto",
+      "Arrecifes",
+      "Carmen de Areco",
+      "Chacabuco",
+      "Junín",
+      "General Viamonte",
+      "General Arenales",
+      "Leandro N. Alem"
+    ],
+    "Región Centro": [
+      "General Las Heras",
+      "Lobos",
+      "Cañuelas",
+      "San Vicente",
+      "Brandsen",
+      "General Belgrano",
+      "Rauch",
+      "Las Flores",
+      "25 de Mayo",
+      "Roque Pérez",
+      "Saladillo",
+      "Bolívar",
+      "Tapalqué",
+      "Olavarría",
+      "Azul"
+    ],
+    "Región Este (Costa Atlántica)": [
+      "General Lavalle",
+      "La Costa",
+      "Pinamar",
+      "Villa Gesell",
+      "General Madariaga",
+      "Mar Chiquita",
+      "General Pueyrredón",
+      "Balcarce",
+      "Tandil"
+    ],
+    "Región Sur": [
+      "Benito Juárez",
+      "Necochea",
+      "Lobería",
+      "Tres Arroyos",
+      "Gonzales Chaves",
+      "Coronel Dorrego",
+      "Coronel Pringles",
+      "Coronel Suárez",
+      "Laprida"
+    ],
+    "Región Sudoeste": [
+      "Bahía Blanca",
+      "Coronel Rosales",
+      "Villarino",
+      "Patagones",
+      "Saavedra",
+      "Tornquist",
+      "Puan",
+      "Adolfo Alsina",
+      "Guaminí",
+      "Daireaux",
+      "Tres Lomas",
+      "Pellegrini",
+      "Rivadavia",
+      "Carlos Tejedor",
+      "Hipólito Yrigoyen",
+      "Trenque Lauquen",
+      "General Villegas"
+    ]
   };
 
   localidadesPorPartido: { [key: string]: string[] } = {
-    "Vicente Lopez": ["Carapachay", "Florida (Oeste)", "La Lucila", "Munro", "Vicente Lopez", "Villa Adelina (VL)", "Villa Martelli"],
-    "San Isidro": ["Beccar", "Boulogne", "San Isidro"],
-    "3 de febrero": ["11 de septiembre", "Caseros", "Churruca", "Ciudadela", "El Libertador", "Jose Ingenieros", "Loma Hermosa", "Martin Coronado", "Pablo Podesta", "Remedios de Escalada", "Santos Lugares", "Villa Bosch", "Villa Raffo"],
-    "Gral San Martin": ["Ayacucho", "Bernardo Monteagudo", "Billinghurst", "C Jardin El Libertador", "C Libertador San Martin", "Chacabuco", "Cnel Jose Zapiola", "Gderos de San Martin", "Godoy Cruz", "Gral Eugenio Necochea", "Gral Jose de Sucre", "Gral Jose Tomas Guido", "Gregoria Matorras", "Jose Leon Suarez", "Juan M de Pueyrredon", "Marques A de Aguado", "Parque San Lorenzo", "Villa Ballester", "Villa Libertad", "Villa Maipu", "Yapeyu"],
-    "La Matanza": ["20 de junio", "Aldo Bonzi", "Ciudad Evita", "Gonzalez Catan", "Gregorio de Laferrere", "Isidro Casanova", "La Tablada", "Lomas del Mirador", "Rafael Castillo", "Ramos Mejia", "San Justo", "Tapiales", "Villa Luzuriaga", "Villa Madero", "Virrey del Pino"],
-    "Gral Las Heras": ["Gral Las Heras"],
-    "Marcos Paz": ["Marcos Paz"],
-    "Merlo": ["Libertad", "Mariano Acosta", "Merlo", "Pontevedra", "San Antonio de Padua"],
-    "Hurlingham": ["Hurlingham", "Villa Tesei", "William Morris"],
-    "Ituzaingo": ["Ituzaingo", "Villa Udaondo"],
-    "Moron": ["Castelar", "El Palomar", "Moron", "Villa Sarmiento"],
-    "Gral Rodriguez": ["Gral Rodriguez"],
-    "Moreno": ["Cuartel V", "Francisco Alvarez", "La Reja", "Moreno", "Paso del Rey", "Trujui"],
-    "Escobar": ["Delta 1ra Seccion (ES)", "Escobar", "Garin", "Ingeniero Maschwitz", "Maquinista Savio", "Matheu"],
-    "Pilar": ["Del Viso", "Fatima", "La Lonja", "Luis Lagomarsino", "Manuel Alberti", "Manzanares", "Pilar", "Pte Derqui", "Villa Astolfi", "Villa Rosa", "Zelaya"],
-    "Jose C Paz": ["Jose C Paz"],
-    "Malvinas Argentinas": ["Adolfo Sourdeaux", "El Triangulo", "Grand Bourg", "Los Polvorines", "Pablo Nogues", "Tierras Altas", "Tortuguitas", "Villa de Mayo"],
-    "San Miguel": ["Bella Vista", "Muñiz", "San Miguel"],
-    "San Fernando": ["Delta 3ra Seccion (SF)", "San Fernando", "Victoria", "Virreyes"],
-    "Tigre": ["Benavidez", "Ciudad de Tigre", "Delta 1ra Seccion (TI)", "Dique Lujan", "Don Torcuato", "El Talar", "General Pacheco", "Ricardo Rojas", "Rincon de Milberg", "Troncos del Talar"]
+    // Zona Norte
+    "Vicente López": ["Olivos", "Florida", "Munro", "Carapachay", "Villa Martelli"],
+    "San Isidro": ["San Isidro", "Martínez", "Acassuso", "Beccar", "Boulogne Sur Mer"],
+    "San Fernando": ["San Fernando", "Victoria", "Virreyes", "Islas del Delta"],
+    "Tigre": ["Tigre", "Don Torcuato", "General Pacheco", "Benavídez", "Nordelta", "El Talar"],
+    "Escobar": ["Belén de Escobar", "Garín", "Ingeniero Maschwitz", "Maquinista Savio", "Matheu"],
+    "Pilar": ["Pilar", "Del Viso", "Derqui", "Villa Rosa", "La Lonja", "Fátima"],
+    "Malvinas Argentinas": ["Los Polvorines", "Grand Bourg", "Tortuguitas", "Sourdeaux"],
+    "San Miguel": ["San Miguel", "Muñiz", "Bella Vista"],
+    "San Martín": ["San Martín", "Villa Ballester", "José León Suárez", "Billinghurst"],
+
+    // Zona Oeste
+    "Tres de Febrero": ["Caseros", "Ciudad Jardín", "Ciudadela", "Santos Lugares"],
+    "Hurlingham": ["Hurlingham", "William C. Morris", "Villa Tesei"],
+    "Morón": ["Morón", "Castelar", "Haedo", "El Palomar"],
+    "Ituzaingó": ["Ituzaingó", "Udaondo"],
+    "Merlo": ["Merlo", "Padua", "Parque San Martín", "Mariano Acosta"],
+    "Moreno": ["Moreno", "La Reja", "Paso del Rey", "Francisco Álvarez"],
+    "La Matanza": ["San Justo", "Ramos Mejía", "Laferrere", "González Catán", "Virrey del Pino", "Gregorio de Laferrere"],
+
+    // Zona Sur
+    "Avellaneda": ["Avellaneda", "Wilde", "Dock Sud", "Sarandí"],
+    "Lanús": ["Lanús Este", "Lanús Oeste", "Remedios de Escalada", "Valentín Alsina"],
+    "Lomas de Zamora": ["Lomas de Zamora", "Banfield", "Temperley", "Turdera"],
+    "Quilmes": ["Quilmes", "Bernal", "Ezpeleta", "Don Bosco"],
+    "Berazategui": ["Berazategui", "Ranelagh", "El Pato", "Sourigues"],
+    "Florencio Varela": ["Florencio Varela", "Bosques", "Zeballos", "Ingeniero Allan"],
+    "Almirante Brown": ["Adrogué", "Burzaco", "Claypole", "Longchamps", "Glew", "Rafael Calzada"],
+    "Ezeiza": ["Ezeiza", "Tristán Suárez", "La Unión", "Canning"],
+    "Esteban Echeverría": ["Monte Grande", "El Jagüel", "Luis Guillón"],
+    "Presidente Perón": ["Guernica"],
+
+    // Región Capital
+    "La Plata": ["La Plata", "City Bell", "Gonnet", "Tolosa", "Los Hornos", "Villa Elisa"],
+    "Berisso": ["Berisso", "Los Talas", "Villa Progreso"],
+    "Ensenada": ["Ensenada", "Punta Lara", "Villa Catella"],
+
+    // Región Norte
+    "Zárate": ["Zárate", "Lima"],
+    "Campana": ["Campana"],
+    "Exaltación de la Cruz": ["Capilla del Señor", "Los Cardales"],
+    "San Andrés de Giles": ["San Andrés de Giles", "Villa Ruiz"],
+    "San Antonio de Areco": ["San Antonio de Areco", "Villa Lía"],
+    "Baradero": ["Baradero", "Alsina"],
+    "San Pedro": ["San Pedro", "Río Tala"],
+    "Ramallo": ["Ramallo", "Villa Ramallo", "El Paraíso"],
+    "San Nicolás": ["San Nicolás de los Arroyos", "La Emilia", "Conesa"],
+
+    // Región Noroeste
+    "Pergamino": ["Pergamino", "Acevedo", "Rancagua"],
+    "Colón": ["Colón", "Pearson"],
+    "Rojas": ["Rojas", "Rafael Obligado"],
+    "Salto": ["Salto", "Inés Indart"],
+    "Arrecifes": ["Arrecifes", "Todd"],
+    "Carmen de Areco": ["Carmen de Areco"],
+    "Chacabuco": ["Chacabuco", "Rawson"],
+    "Junín": ["Junín", "Agustina", "Saforcada"],
+    "General Viamonte": ["Los Toldos", "Baigorrita"],
+    "General Arenales": ["Arenales", "Arribeños"],
+    "Leandro N. Alem": ["Vedia", "Juan Bautista Alberdi"],
+
+    // Región Centro
+    "General Las Heras": ["Las Heras"],
+    "Lobos": ["Lobos", "Salvador María"],
+    "Cañuelas": ["Cañuelas", "Máximo Paz"],
+    "San Vicente": ["San Vicente", "Alejandro Korn"],
+    "Brandsen": ["Brandsen", "Jeppener"],
+    "General Belgrano": ["General Belgrano"],
+    "Rauch": ["Rauch"],
+    "Las Flores": ["Las Flores"],
+    "25 de Mayo": ["25 de Mayo", "Norberto de la Riestra"],
+    "Roque Pérez": ["Roque Pérez"],
+    "Saladillo": ["Saladillo", "Del Carril"],
+    "Bolívar": ["San Carlos de Bolívar"],
+    "Tapalqué": ["Tapalqué"],
+    "Olavarría": ["Olavarría", "Hinojo", "Sierra Chica"],
+    "Azul": ["Azul", "Chillar", "Cacharí"],
+
+    // Región Este (Costa Atlántica)
+    "General Lavalle": ["General Lavalle"],
+    "La Costa": ["San Clemente del Tuyú", "Santa Teresita", "Mar de Ajó", "San Bernardo", "Las Toninas"],
+    "Pinamar": ["Pinamar", "Ostende", "Valeria del Mar", "Cariló"],
+    "Villa Gesell": ["Villa Gesell", "Mar Azul", "Mar de las Pampas"],
+    "General Madariaga": ["General Madariaga"],
+    "Mar Chiquita": ["Coronel Vidal", "Santa Clara del Mar"],
+    "General Pueyrredón": ["Mar del Plata", "Batán"],
+    "Balcarce": ["Balcarce", "Napaleofú"],
+    "Tandil": ["Tandil", "Vela", "Gardey"],
+
+    // Región Sur
+    "Benito Juárez": ["Juárez", "Barker"],
+    "Necochea": ["Necochea", "Quequén"],
+    "Lobería": ["Lobería", "San Manuel"],
+    "Tres Arroyos": ["Tres Arroyos", "Claromecó"],
+    "Gonzales Chaves": ["De la Garma"],
+    "Coronel Dorrego": ["Dorrego", "Oriente"],
+    "Coronel Pringles": ["Pringles", "Indio Rico"],
+    "Coronel Suárez": ["Coronel Suárez", "Huanguelén"],
+    "Laprida": ["Laprida"],
+
+    // Región Sudoeste
+    "Bahía Blanca": ["Bahía Blanca", "Ingeniero White", "Cabildo"],
+    "Coronel Rosales": ["Punta Alta", "Pehuen Có"],
+    "Villarino": ["Médanos", "Pedro Luro"],
+    "Patagones": ["Carmen de Patagones"],
+    "Saavedra": ["Pigüé", "Saavedra"],
+    "Tornquist": ["Tornquist", "Sierra de la Ventana", "Villa Ventana"],
+    "Puan": ["Puan", "Darregueira", "Felipe Solá"],
+    "Adolfo Alsina": ["Carhué"],
+    "Guaminí": ["Guaminí", "Casbas"],
+    "Daireaux": ["Daireaux", "Arboledas"],
+    "Tres Lomas": ["Tres Lomas", "Ingeniero Thompson"],
+    "Pellegrini": ["Pellegrini"],
+    "Rivadavia": ["América", "Fortín Olavarría"],
+    "Carlos Tejedor": ["Carlos Tejedor", "Tres Algarrobos"],
+    "Hipólito Yrigoyen": ["Henderson"],
+    "Trenque Lauquen": ["Trenque Lauquen", "Berutti"],
+    "General Villegas": ["General Villegas", "Piedritas", "Bunge"]
   };
 
   resultados: string[] = [
