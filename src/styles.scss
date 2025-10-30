@@ -33,6 +33,19 @@ body {
   background: #fafafa;
 }
 
+/* Estilos del dialog de resultado */
+.cdk-overlay-pane.resultado-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 20px;
+  box-shadow: 0 8px 36px 0 rgba(44,62,80,0.27);
+}
+.cdk-overlay-pane.resultado-dialog .mat-mdc-dialog-container {
+  padding: 0;
+  background: transparent;
+}
+.cdk-overlay-backdrop.resultado-dialog {
+  background: rgba(40,58,90,0.21);
+}
+
 .container {
   width: 100%;
   max-width: 960px;
