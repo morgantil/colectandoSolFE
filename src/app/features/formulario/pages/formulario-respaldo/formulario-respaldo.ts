@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,109 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormularioService } from '../../../../formulario.service';
+
+@Component({
+  selector: 'app-resultado-dialog',
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatDialogModule, MatCardModule],
+  template: `
+    <div class="dialog-modern" [class.success]="data.type === 'success'" [class.error]="data.type === 'error'">
+      <div class="dialog-modern-header">
+        <ng-container *ngIf="data.type === 'success'; else errorIcon">
+          <mat-icon class="dialog-modern-icon" color="primary">check_circle</mat-icon>
+        </ng-container>
+        <ng-template #errorIcon>
+          <mat-icon class="dialog-modern-icon" color="warn">error</mat-icon>
+        </ng-template>
+      </div>
+      <div class="dialog-modern-content">
+        <h2 class="dialog-modern-title">{{ data.title }}</h2>
+        <div class="dialog-modern-message">{{ data.message }}</div>
+      </div>
+      <div class="dialog-modern-actions">
+        <button mat-flat-button color="primary" (click)="close()">Aceptar</button>
+      </div>
+    </div>
+  `,
+  styles: `
+    .dialog-modern {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 28px 24px 28px;
+      border-radius: 22px;
+      background: #fff;
+      max-width: 96vw;
+      min-width: 300px;
+      box-shadow: 0 6px 30px rgba(44,62,80,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .dialog-modern-header {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      margin-bottom: 8px;
+    }
+    .dialog-modern-icon {
+      font-size: 70px;
+      margin-bottom: 0px;
+      margin-top: 0;
+      /* Mejor centrado y sin recorte */
+      box-sizing: content-box;
+    }
+    .dialog-modern-title {
+      font-weight: 600;
+      color: #24292f;
+      margin: 12px 0 7px;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .dialog-modern-message {
+      font-size: 1.075rem;
+      color: #49515d;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .dialog-modern-actions {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .success .dialog-modern-header .dialog-modern-icon {
+      color: #38cb89;
+      background: linear-gradient(145deg,#e1f7e7,#b4edd2 60%);
+      border-radius: 50%;
+    }
+    .error .dialog-modern-header .dialog-modern-icon {
+      color: #f3666c;
+      background: linear-gradient(145deg,#f9dedf 60%,#f7dbec);
+      border-radius: 50%;
+    }
+    @media (max-width: 500px) {
+      .dialog-modern {
+        min-width: 0;
+        padding: 18px 6px 16px 6px;
+      }
+      .dialog-modern-title { font-size: 1.1rem; }
+      .dialog-modern-icon { font-size: 50px; }
+    }
+  `
+})
+export class ResultadoDialogComponent {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { title: string; message: string; type: 'success' | 'error' },
+    private dialogRef: MatDialogRef<ResultadoDialogComponent>
+  ) {}
+
+  close() {
+    this.dialogRef.close(true);
+  }
+}
 
 @Component({
   selector: 'app-formulario-respaldo',
@@ -33,243 +135,244 @@ import { FormularioService } from '../../../../formulario.service';
     MatDividerModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   template: `
-  <div class="container">
-    <!-- Logos -->
-    <div class="logo-container">
-      <img class="logo" src="assets/edenor-logo.jpg" alt="Logo Edenor">
-      <img class="logo" src="https://colectandosol.co/wp-content/uploads/2016/03/logo-colectandosol-negro-e1458937808521.png" alt="Logo ColectandoSol">
-    </div>
+    <div class="container">
+      <!-- Logos -->
+      <div class="logo-container">
+        <img class="logo" src="assets/edenor-logo.jpg" alt="Logo Edenor">
+        <img class="logo" src="https://colectandosol.co/wp-content/uploads/2016/03/logo-colectandosol-negro-e1458937808521.png" alt="Logo ColectandoSol">
+      </div>
 
-    <h1 class="main-title">Capacitación Energética</h1>
+      <h1 class="main-title">Capacitación Energética</h1>
 
-    <mat-card class="form-card">
-      <mat-card-content>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-          
-          <!-- Información del Cliente -->
-          <div class="section">
-            <h2 class="section-title">Información del Cliente</h2>
+      <mat-card class="form-card">
+        <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
             
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>ID de Cuenta</mat-label>
-                <input matInput formControlName="idCuenta" placeholder="ID de Cuenta" required>
-                <mat-error *ngIf="form.get('idCuenta')?.hasError('required')">ID de Cuenta es requerido</mat-error>
-              </mat-form-field>
+            <!-- Información del Cliente -->
+            <div class="section">
+              <h2 class="section-title">Información del Cliente</h2>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>ID de Cuenta</mat-label>
+                  <input matInput formControlName="idCuenta" placeholder="ID de Cuenta" required>
+                <mat-error *ngIf="shouldShow('idCuenta','required')">ID de Cuenta es requerido</mat-error>
+                </mat-form-field>
 
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Número de Medidor</mat-label>
-                <input matInput formControlName="numeroMedidor" placeholder="Número de Medidor" required>
-                <mat-error *ngIf="form.get('numeroMedidor')?.hasError('required')">Número de Medidor es requerido</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Nombre del Titular</mat-label>
-                <input matInput formControlName="nombreTitular" placeholder="Nombre del Titular" required>
-                <mat-error *ngIf="form.get('nombreTitular')?.hasError('required')">Nombre del Titular es requerido</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>DNI</mat-label>
-                <input matInput formControlName="dni" placeholder="DNI" required>
-                <mat-error *ngIf="form.get('dni')?.hasError('required')">DNI es requerido</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Dirección</mat-label>
-                <input matInput formControlName="direccion" placeholder="Dirección">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Fecha de Nacimiento</mat-label>
-                <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Entre Calles</mat-label>
-                <input matInput formControlName="entreCalles" placeholder="Entre Calles">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Departamento</mat-label>
-                <input matInput formControlName="departamento" placeholder="Departamento">
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Referencia</mat-label>
-                <input matInput formControlName="referencia" placeholder="Referencia">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Zona</mat-label>
-                <mat-select formControlName="zona" required>
-                  <mat-option value="">Seleccionar Zona</mat-option>
-                  <mat-option *ngFor="let zona of zonas" [value]="zona">{{ zona }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('zona')?.hasError('required')">Zona es requerida</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Partido</mat-label>
-                <mat-select formControlName="partido" required>
-                  <mat-option value="">Seleccionar Partido</mat-option>
-                  <mat-option *ngFor="let partido of partidosDisponibles" [value]="partido">{{ partido }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('partido')?.hasError('required')">Partido es requerido</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Localidad</mat-label>
-                <mat-select formControlName="localidad" required>
-                  <mat-option value="">Seleccionar Localidad</mat-option>
-                  <mat-option *ngFor="let localidad of localidadesDisponibles" [value]="localidad">{{ localidad }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('localidad')?.hasError('required')">Localidad es requerida</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Teléfono</mat-label>
-                <input matInput type="tel" formControlName="telefono" placeholder="Teléfono">
-                <mat-error *ngIf="form.get('telefono')?.hasError('pattern')">Formato de teléfono inválido</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Mail</mat-label>
-                <input matInput type="email" formControlName="mail" placeholder="Mail">
-                <mat-error *ngIf="form.get('mail')?.hasError('email')">Formato de email inválido</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Medidor</mat-label>
-                <input matInput formControlName="medidor" placeholder="Medidor">
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Fecha</mat-label>
-                <input matInput [matDatepicker]="fechaPicker" placeholder="Fecha" formControlName="fecha" required>
-                <mat-datepicker-toggle matSuffix [for]="fechaPicker"></mat-datepicker-toggle>
-                <mat-datepicker #fechaPicker [touchUi]="true"></mat-datepicker>
-                <mat-error *ngIf="form.get('fecha')?.hasError('required')">Fecha es requerida</mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field-full">
-                <mat-label>Artefactos</mat-label>
-                <textarea matInput rows="3" formControlName="artefactos" placeholder="Artefactos"></textarea>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field-full">
-                <mat-label>Observaciones</mat-label>
-                <textarea matInput rows="3" formControlName="observaciones" placeholder="Observaciones"></textarea>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Nombre del Cliente</mat-label>
-                <input matInput formControlName="nombreCliente" placeholder="Nombre del Cliente" required>
-                <mat-error *ngIf="form.get('nombreCliente')?.hasError('required')">Nombre del Cliente es requerido</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Nombre del Promotor</mat-label>
-                <input matInput formControlName="nombrePromotor" placeholder="Nombre del Promotor" required>
-                <mat-error *ngIf="form.get('nombrePromotor')?.hasError('required')">Nombre del Promotor es requerido</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <mat-divider></mat-divider>
-
-          <!-- Resultado -->
-          <div class="section">
-            <h2 class="section-title">Resultado</h2>
-            <mat-form-field appearance="outline" class="form-field-full">
-              <mat-label>Resultado</mat-label>
-              <mat-select formControlName="resultado" required>
-                <mat-option value="">Seleccionar Resultado</mat-option>
-                <mat-option *ngFor="let resultado of resultados" [value]="resultado">{{ resultado }}</mat-option>
-              </mat-select>
-              <mat-error *ngIf="form.get('resultado')?.hasError('required')">Resultado es requerido</mat-error>
-            </mat-form-field>
-          </div>
-
-          <mat-divider></mat-divider>
-
-          <!-- Firmas -->
-          <div class="section signatures-section">
-            <h2 class="section-title">Firmas</h2>
-            
-            <div class="signatures-container">
-              <div class="signature-box">
-                <h3>Firma Cliente</h3>
-                <div class="canvas-container">
-                  <canvas #clienteCanvas class="signature-canvas" width="300" height="150"></canvas>
-                  <div class="canvas-placeholder" *ngIf="!firmaCliente">Firma Cliente</div>
-                </div>
-                <button mat-stroked-button type="button" (click)="limpiarFirma('cliente')">
-                  <mat-icon>clear</mat-icon>
-                  Limpiar Firma
-                </button>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Número de Medidor</mat-label>
+                  <input matInput formControlName="numeroMedidor" placeholder="Número de Medidor" required>
+                <mat-error *ngIf="shouldShow('numeroMedidor','required')">Número de Medidor es requerido</mat-error>
+                </mat-form-field>
               </div>
 
-              <div class="signature-box">
-                <h3>Firma Promotor</h3>
-                <div class="canvas-container">
-                  <canvas #promotorCanvas class="signature-canvas" width="300" height="150"></canvas>
-                  <div class="canvas-placeholder" *ngIf="!firmaPromotor">Firma Promotor</div>
-                </div>
-                <button mat-stroked-button type="button" (click)="limpiarFirma('promotor')">
-                  <mat-icon>clear</mat-icon>
-                  Limpiar Firma
-                </button>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Nombre del Titular</mat-label>
+                  <input matInput formControlName="nombreTitular" placeholder="Nombre del Titular" required>
+                <mat-error *ngIf="shouldShow('nombreTitular','required')">Nombre del Titular es requerido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>DNI</mat-label>
+                  <input matInput formControlName="dni" placeholder="DNI" required>
+                <mat-error *ngIf="shouldShow('dni','required')">DNI es requerido</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Dirección</mat-label>
+                  <input matInput formControlName="direccion" placeholder="Dirección">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Fecha de Nacimiento</mat-label>
+                  <input matInput [matDatepicker]="picker" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker [touchUi]="true"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Entre Calles</mat-label>
+                  <input matInput formControlName="entreCalles" placeholder="Entre Calles">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Departamento</mat-label>
+                  <input matInput formControlName="departamento" placeholder="Departamento">
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Referencia</mat-label>
+                  <input matInput formControlName="referencia" placeholder="Referencia">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Zona</mat-label>
+                  <mat-select formControlName="zona" required>
+                    <mat-option value="">Seleccionar Zona</mat-option>
+                    <mat-option *ngFor="let zona of zonas" [value]="zona">{{ zona }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="shouldShow('zona','required')">Zona es requerida</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Partido</mat-label>
+                  <mat-select formControlName="partido" required>
+                    <mat-option value="">Seleccionar Partido</mat-option>
+                    <mat-option *ngFor="let partido of partidosDisponibles" [value]="partido">{{ partido }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="shouldShow('partido','required')">Partido es requerido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Localidad</mat-label>
+                  <mat-select formControlName="localidad" required>
+                    <mat-option value="">Seleccionar Localidad</mat-option>
+                    <mat-option *ngFor="let localidad of localidadesDisponibles" [value]="localidad">{{ localidad }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="shouldShow('localidad','required')">Localidad es requerida</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Teléfono</mat-label>
+                  <input matInput type="tel" formControlName="telefono" placeholder="Teléfono">
+                  <mat-error *ngIf="shouldShow('telefono','pattern')">Formato de teléfono inválido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Mail</mat-label>
+                  <input matInput type="email" formControlName="mail" placeholder="Mail">
+                  <mat-error *ngIf="shouldShow('mail','email')">Formato de email inválido</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Medidor</mat-label>
+                  <input matInput formControlName="medidor" placeholder="Medidor">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Fecha</mat-label>
+                  <input matInput [matDatepicker]="fechaPicker" placeholder="Fecha" formControlName="fecha" required>
+                  <mat-datepicker-toggle matSuffix [for]="fechaPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #fechaPicker [touchUi]="true"></mat-datepicker>
+                  <mat-error *ngIf="shouldShow('fecha','required')">Fecha es requerida</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field-full">
+                  <mat-label>Artefactos</mat-label>
+                  <textarea matInput rows="3" formControlName="artefactos" placeholder="Artefactos"></textarea>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field-full">
+                  <mat-label>Observaciones</mat-label>
+                  <textarea matInput rows="3" formControlName="observaciones" placeholder="Observaciones"></textarea>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Nombre del Cliente</mat-label>
+                  <input matInput formControlName="nombreCliente" placeholder="Nombre del Cliente" required>
+                  <mat-error *ngIf="shouldShow('nombreCliente','required')">Nombre del Cliente es requerido</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Nombre del Promotor</mat-label>
+                  <input matInput formControlName="nombrePromotor" placeholder="Nombre del Promotor" required>
+                  <mat-error *ngIf="shouldShow('nombrePromotor','required')">Nombre del Promotor es requerido</mat-error>
+                </mat-form-field>
               </div>
             </div>
-          </div>
 
-          <!-- Botones -->
-          <div class="actions">
-            <button mat-flat-button color="primary" type="submit" [disabled]="!puedeEnviar || enviando">
-              <mat-spinner *ngIf="enviando" diameter="20" class="button-spinner"></mat-spinner>
-              <mat-icon *ngIf="!enviando">send</mat-icon>
-              {{ enviando ? 'Enviando...' : 'Enviar' }}
-            </button>
-            <button mat-stroked-button type="button" (click)="onLimpiar()">
-              <mat-icon>refresh</mat-icon>
-              Limpiar
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
+            <mat-divider></mat-divider>
 
-    <!-- Overlay de carga -->
-    <div class="overlay" *ngIf="enviando">
-      <mat-spinner diameter="50"></mat-spinner>
-      <div class="overlay-message">Enviando formulario...</div>
+            <!-- Resultado -->
+            <div class="section">
+              <h2 class="section-title">Resultado</h2>
+              <mat-form-field appearance="outline" class="form-field-full">
+                <mat-label>Resultado</mat-label>
+                <mat-select formControlName="resultado" required>
+                  <mat-option value="">Seleccionar Resultado</mat-option>
+                  <mat-option *ngFor="let resultado of resultados" [value]="resultado">{{ resultado }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="shouldShow('resultado','required')">Resultado es requerido</mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Firmas -->
+            <div class="section signatures-section">
+              <h2 class="section-title">Firmas</h2>
+              
+              <div class="signatures-container">
+                <div class="signature-box">
+                  <h3>Firma Cliente</h3>
+                  <div class="canvas-container">
+                    <canvas #clienteCanvas class="signature-canvas" width="300" height="150"></canvas>
+                    <div class="canvas-placeholder" *ngIf="!firmaCliente">Firma Cliente</div>
+                  </div>
+                  <button mat-stroked-button type="button" (click)="limpiarFirma('cliente')">
+                    <mat-icon>clear</mat-icon>
+                    Limpiar Firma
+                  </button>
+                </div>
+
+                <div class="signature-box">
+                  <h3>Firma Promotor</h3>
+                  <div class="canvas-container">
+                    <canvas #promotorCanvas class="signature-canvas" width="300" height="150"></canvas>
+                    <div class="canvas-placeholder" *ngIf="!firmaPromotor">Firma Promotor</div>
+                  </div>
+                  <button mat-stroked-button type="button" (click)="limpiarFirma('promotor')">
+                    <mat-icon>clear</mat-icon>
+                    Limpiar Firma
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="actions">
+              <button mat-flat-button color="primary" type="submit" [disabled]="!puedeEnviar || enviando">
+                <mat-spinner *ngIf="enviando" diameter="20" class="button-spinner"></mat-spinner>
+                <mat-icon *ngIf="!enviando">send</mat-icon>
+                {{ enviando ? 'Enviando...' : 'Enviar' }}
+              </button>
+              <button mat-stroked-button type="button" (click)="onLimpiar()">
+                <mat-icon>refresh</mat-icon>
+                Limpiar
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Overlay de carga -->
+      <div class="overlay" *ngIf="enviando">
+        <mat-spinner diameter="50"></mat-spinner>
+        <div class="overlay-message">Enviando formulario...</div>
+      </div>
     </div>
-  </div>
   `,
   styles: `
     .container {
@@ -278,6 +381,26 @@ import { FormularioService } from '../../../../formulario.service';
       padding: 20px;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
+    }
+
+    /* Snackbars */
+    .success-snackbar {
+      background: #2e7d32;
+      color: #fff;
+      letter-spacing: .2px;
+    }
+
+    .error-snackbar {
+      background: #c62828;
+      color: #fff;
+      letter-spacing: .2px;
+    }
+
+    .success-snackbar .mat-simple-snack-bar-action,
+    .error-snackbar .mat-simple-snack-bar-action {
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .logo-container {
@@ -493,6 +616,7 @@ export class FormularioRespaldo implements AfterViewInit {
 
   form: FormGroup;
   enviando: boolean = false;
+  submitted: boolean = false;
   firmaCliente: boolean = false;
   firmaPromotor: boolean = false;
 
@@ -776,7 +900,8 @@ export class FormularioRespaldo implements AfterViewInit {
   constructor(
     private fb: FormBuilder, 
     private snackBar: MatSnackBar,
-    private formularioService: FormularioService
+    private formularioService: FormularioService,
+    private dialog: MatDialog
   ) {
     this.form = this.fb.group({
       // Información del cliente
@@ -936,7 +1061,15 @@ export class FormularioRespaldo implements AfterViewInit {
     }
   }
 
+  shouldShow(controlName: string, error?: string): boolean {
+    const control = this.form.get(controlName);
+    if (!control) return false;
+    const hasError = error ? control.hasError(error) : control.invalid;
+    return (control.touched || this.submitted) && hasError;
+  }
+
   onSubmit() {
+    this.submitted = true;
     // Validar que las firmas estén presentes
     if (!this.firmaCliente || !this.firmaPromotor) {
       this.form.markAllAsTouched();
@@ -971,28 +1104,61 @@ export class FormularioRespaldo implements AfterViewInit {
     // Enviar al backend
     this.formularioService.enviarFormulario(payload).subscribe({
       next: (res: any) => {
-        console.log('Formulario enviado exitosamente:', res);
         this.enviando = false;
-        this.snackBar.open('¡Formulario Enviado!', 'Cerrar', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
-        // Limpiar formulario después de envío exitoso
+        if (res && res.status >= 200 && res.status < 300) {
+          this.submitted = false;
+          const ref = this.dialog.open(ResultadoDialogComponent, {
+            width: '420px',
+            panelClass: 'resultado-dialog',
+            data: {
+              title: '¡Formulario enviado!',
+              message: 'Tu formulario fue enviado correctamente.',
+              type: 'success'
+            }
+          });
+          ref.afterClosed().subscribe(() => {
+            // Limpiar formulario después de confirmar el modal
         this.onLimpiar();
+          });
+        } else {
+          this.submitted = false;
+          this.dialog.open(ResultadoDialogComponent, {
+            width: '420px',
+            panelClass: 'resultado-dialog',
+            data: {
+              title: 'No se pudo enviar',
+              message: 'Hubo un problema con el envío. Intenta nuevamente.',
+              type: 'error'
+            }
+          });
+        }
       },
       error: (err: any) => {
         console.error('Error al enviar formulario:', err);
         this.enviando = false;
-        this.snackBar.open('Error al enviar el formulario. Por favor, intente nuevamente.', 'Cerrar', {
-          duration: 5000,
-          panelClass: ['error-snackbar']
+        const mensaje = err?.status
+          ? `Error ${err.status}: No se pudo enviar el formulario.`
+          : 'Error de conexión. Verifique su red e intente nuevamente.';
+        this.submitted = false;
+        this.dialog.open(ResultadoDialogComponent, {
+          width: '420px',
+          panelClass: 'resultado-dialog',
+          data: {
+            title: 'Error al enviar',
+            message: mensaje,
+            type: 'error'
+          }
         });
       }
     });
   }
 
   onLimpiar() {
+    this.submitted = false;
     this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.updateValueAndValidity();
     this.form.patchValue({ fecha: new Date() });
     this.limpiarFirma('cliente');
     this.limpiarFirma('promotor');
