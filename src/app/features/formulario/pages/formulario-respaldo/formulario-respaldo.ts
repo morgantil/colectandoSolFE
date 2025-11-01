@@ -1118,7 +1118,9 @@ export class FormularioRespaldo implements AfterViewInit {
           });
           ref.afterClosed().subscribe(() => {
             // Limpiar formulario después de confirmar el modal
-        this.onLimpiar();
+        // this.onLimpiar();
+        //al no estar funcionando el limpiar, se recarga la página para que el formulario se reinicie
+        window.location.reload();
           });
         } else {
           this.submitted = false;
